@@ -30,9 +30,9 @@ then
     then
         rm $file
         wget $link
-    else
-        wget $link
     fi
+else
+    wget $link
 fi
 
 #create directory for kernel build and for outputed debs
