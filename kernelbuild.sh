@@ -23,7 +23,7 @@ fi
 
 #check for file name, if found, ask the user if they want the file redownloaded
 if [ -e $file ]
-then 
+then
     read -r -p "File exists. Do you want to redownload the file, if not, existing file will be used? [y/N] " response
     response=${response,,}    # tolower
     if [[ "$response" =~ ^(yes|y)$ ]]
@@ -46,18 +46,17 @@ rm $file
 echo "Done!"
 
 #cd into kernel directory then copy current config and delete CONFIG_SYSTEM_TRUSTED_KEYS = ""
-cd $kerneldir
+cd $kerneldir/$name && {
 cp /boot/config-`uname -r` .config
 sed -i "/CONFIG_SYSTEM_TRUSTED_KEYS/d" .config
 
-#make oldconfig then build kernel
+make oldconfig then build kernel
 make olddefconfig
-make -j`nproc` bindeb-pkg 
-
-#cd back into kerneldir, delete build directory, then move newly created deb packages to debdir version subfolder
-cd $kerneldir
-rm -r $name
-mv *$version* $debdir/$name
+make -j`nproc` bindeb-pkg
+}
+#delete build directory, then move newly created deb packages to debdir version subfolder
+rm -r $kerneldir/$name
+mv $kerneldir/*$version* $debdir/$name
 
 #install linux-headers, linux-image and linux-libc-dev
 read -r -p "Do you want to install the kernel debs automatically? [y/N] " response
@@ -66,6 +65,5 @@ read -r -p "Do you want to install the kernel debs automatically? [y/N] " respon
     then
         echo "Sudo is required, so please enter your password when the prompt appears"
         sudo apt install ./$debdirname/$name/linux-image-${version}_${version}-1_`dpkg --print-architecture`.deb ./$debdirname/$name/linux-headers-${version}_${version}-1_`dpkg --print-architecture`.deb ./$debdirname/$name/linux-libc-dev_${version}-1_`dpkg --print-architecture`.deb
-    else
-        echo "This script has finished building your kernel, enjoy!"
     fi
+echo "This script has finished building your Linux $version kernel, enjoy!"
