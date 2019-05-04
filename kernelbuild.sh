@@ -50,7 +50,7 @@ cd $kerneldir/$name && {
 cp /boot/config-`uname -r` .config
 sed -i "/CONFIG_SYSTEM_TRUSTED_KEYS/d" .config
 
-make oldconfig then build kernel
+#make oldconfig then build kernel
 make olddefconfig
 make -j`nproc` bindeb-pkg
 }
