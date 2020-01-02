@@ -12,7 +12,12 @@ name=${file::-7}
 version=${name:6}
 debdirname=${debdir##*/}
 
-#if link ends in .tar.xz continue, else, exit
+#check if debdir exists(and in turn, also kerneldir), if not, create it
+if [ -d "$debdir" ] then; then
+ mkdir -p $debdir
+ fi
+ 
+#if link ends in .tar.xz or .tar.gz continue, else, exit
 if [[ "$link" == *.tar.xz ]] || [[ "$link" == *.tar.gz ]]
 then
     :
@@ -21,9 +26,11 @@ else
     exit
 fi
 
+#checks for rc kernel
 if [[ $file == *rc* ]]; then
  version=$(sed 's/\(-rc\)/.0\1/g' <<< $version)
 fi
+
 #check for file name, if found, ask the user if they want the file redownloaded
 if [ -e $file ]
 then
