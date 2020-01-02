@@ -13,7 +13,7 @@ version=${name:6}
 debdirname=${debdir##*/}
 
 #if link ends in .tar.xz continue, else, exit
-if [[ "$link" == *.tar.xz ]]
+if [[ "$link" == *.tar.xz ]] || [[ "$link" == *.tar.gz ]]
 then
     :
 else
@@ -21,6 +21,9 @@ else
     exit
 fi
 
+if [[ $file == *rc* ]]; then
+ version=$(sed 's/\(-rc\)/.0\1/g' <<< $version)
+fi
 #check for file name, if found, ask the user if they want the file redownloaded
 if [ -e $file ]
 then
@@ -64,6 +67,6 @@ read -r -p "Do you want to install the kernel debs automatically? [y/N] " respon
     if [[ "$response" =~ ^(yes|y)$ ]]
     then
         echo "Sudo is required, so please enter your password when the prompt appears"
-        sudo apt install ./$debdirname/$name/linux-image-${version}_${version}-1_`dpkg --print-architecture`.deb ./$debdirname/$name/linux-headers-${version}_${version}-1_`dpkg --print-architecture`.deb ./$debdirname/$name/linux-libc-dev_${version}-1_`dpkg --print-architecture`.deb
+        sudo apt install "./$debdirname/$name/linux-image-${version}_${version}-1_`dpkg --print-architecture`.deb" "./$debdirname/$name/linux-headers-${version}_${version}-1_`dpkg --print-architecture`.deb" "./$debdirname/$name/linux-libc-dev_${version}-1_`dpkg --print-architecture`.deb"
     fi
 echo "This script has finished building your Linux $version kernel, enjoy!"
