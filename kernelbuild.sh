@@ -2,6 +2,9 @@
 #link="https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.0.11.tar.xz" #was used for testing
 read -p "Please enter the link to the kernel tar file: " link
 
+#EDIT
+
+
 #Variables to set
 kerneldir=$HOME/kernels
 debdir=$HOME/kernels/built-debs
