@@ -1,0 +1,6 @@
+built-debs/
+surface/
+linux*/
+*.tar.*
+kernelbuild-keep-git.sh
+kernelbuild, combined.sh
