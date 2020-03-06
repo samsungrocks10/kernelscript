@@ -3,6 +3,7 @@
 read -p "Please enter the link to the kernel tar file: " link
 
 #EDIT
+#EDIT 2 - Jayden
 
 
 #Variables to set
